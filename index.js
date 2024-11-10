@@ -66,6 +66,8 @@ const checkIfUser = (req, res, next) => {
 
 app.get("*", checkIfUser);
 
+app.post("*", checkIfUser);
+
 app.get("/signout", (req, res) => {
     res.cookie("jwt", "", { maxAge: 1 });
     res.redirect("/");
