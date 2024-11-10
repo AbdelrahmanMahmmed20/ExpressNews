@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل حساب جديد</title>
+    <style>
+        /* إعدادات الخطوط والتنسيق */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            direction: rtl;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #e6f2ff;
+        }
+
+        .signup-container {
+            width: 350px;
+            padding: 30px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .signup-container h2 {
+            text-align: center;
+            color: #005b96;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #005b96;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #b3d1ff;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #005b96;
+        }
+
+        .signup-button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #005b96;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .signup-button:hover {
+            background-color: #003f6b;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 15px;
+            color: #005b96;
+        }
+
+        .login-link a {
+            color: #005b96;
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        #passwordErorr{
+            color: #ff5d79;
+            margin-left: 0.4rem;
+            font-weight: 600;
+        }
+        #emailErorr{
+            color: #ff5d79;
+            margin-left: 0.4rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="signup-container">
+        <h2>تسجيل حساب جديد</h2>
+        <form id="idForm">
+            <div class="form-group">
+                <label for="username">اسم المستخدم</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="email">البريد الإلكتروني</label>
+                <input type="text" id="email" name="email">
+                <p id="emailErorr"></p>
+            </div>
+            <div class="form-group">
+                <label for="password">كلمة المرور</label>
+                <input type="password" id="password" name="password" >
+                <p id="passwordErorr"></p>
+            </div>
+            <button type="submit" class="signup-button">تسجيل</button>
+            <div class="login-link">
+                لديك حساب بالفعل؟ <a href="/login">تسجيل الدخول</a>
+            </div>
+        </form>
+    </div>
+    <script>
+        idForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            emailErorr.textContent =""
+            passwordErorr.textContent =""
+            const res = await fetch("/signup", {
+                method: "POST",
+                body: JSON.stringify({
+                    username: username.value,
+                    email: email.value,
+                    password: password.value
+                }),
+                headers: { "Content-Type": "application/json" },
+            });
+
+            const data = await res.json();
+            console.log(data)
+            if (data.validationError){
+                console.log(data.validationError);
+                data.validationError.forEach(item => {
+                    if(item.path == "email"){
+                        emailErorr.textContent = item.msg;
+                    }
+                    if(item.path == "password")
+                    {
+                        passwordErorr.textContent= item.msg;
+                    }
+                });
+            }
+            if (data.existEmail){
+                console.log(data.existEmail);
+                emailErorr.textContent = "Email already exist, Try to login";
+            }
+            if (data.id) location.assign('/home');
+        });
+    </script>
+</body>
+</html>

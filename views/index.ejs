@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>View Articles</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e9eff1;
+            margin: 0;
+            padding: 20px;
+            direction: rtl;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .header {
+            background-color: #ffffff;
+            color: #000000;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            direction: rtl;
+        }
+
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            align-items: center;
+        }
+
+        .user-name {
+            font-size: 16px;
+            margin-left: auto;
+        }
+
+        .signout-btn {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .signout-btn:hover {
+            background-color: #c0392b;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .new-article-button {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .new-article {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .new-article:hover {
+            background-color: #0056b3;
+        }
+
+        .post {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            padding: 20px;
+            width: 100%;
+            position: relative;
+        }
+
+        .profile-img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            margin-left: 10px;
+            border: 2px solid #4267B2;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .username {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .post-time {
+            margin: 5px 0 0;
+            color: #606770;
+            font-size: 14px;
+        }
+
+        .content {
+            margin-top: 15px;
+            line-height: 1.6;
+            color: #444;
+            font-size: 16px;
+        }
+
+        .footer {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .view-button,
+        .delete-button,
+        .copy-button {
+            background-color: #4267B2;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 16px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .view-button:hover,
+        .delete-button:hover,
+        .copy-button:hover {
+            background-color: #365899;
+        }
+
+        .delete-button {
+            background-color: #ff4b4b;
+        }
+
+        .delete-button:hover {
+            background-color: #e03e3e;
+        }
+
+        .three-dots {
+            position: absolute;
+            /* لجعل النقاط ثابتة في مكان معين داخل العنصر */
+            left: 10px;
+            /* تحديد المسافة من الحافة اليسرى */
+            top: 10px;
+            /* تحديد المسافة من الحافة العليا */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            /* لضمان محاذاة النقاط بشكل صحيح إلى اليسار */
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            padding: 5px;
+        }
+
+        .dot {
+            width: 5px;
+            height: 5px;
+            background-color: #333;
+            border-radius: 50%;
+            margin: 3px 0;
+        }
+
+
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 1000;
+            /* backdrop سيظهر فوق المقالات */
+        }
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1050;
+            /* المودال سيظهر فوق الـ backdrop */
+            width: 300px;
+            padding: 20px;
+        }
+
+        .modal-header {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 10px 0;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .modal-footer {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-close {
+            background: transparent;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .no {
+            color: #c5c5c5;
+            text-align: center;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #606770;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+            cursor: pointer;
+        }
+
+        .button i {
+            font-size: 20px;
+        }
+
+        .button:hover {
+            background-color: #e4e6eb;
+        }
+
+        .like-button i {
+            color: #1877f2;
+        }
+
+        .like-count {
+            font-weight: normal;
+            color: #606770;
+        }
+
+        .shadow-hr {
+            border: 0;
+            height: 1px;
+            background-color: #ddd;
+            box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .dots {
+            font-size: 25px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="user-info">
+                <span class="user-name">مرحبا، <%= user.username %></span>
+                <form action="/signout" class="get">
+                    <button class="signout-btn">تسجيل الخروج</button>
+                </form>
+            </div>
+        </header>
+
+        <h1>المقالات</h1>
+
+        <!-- زر نشر مقال جديد -->
+        <div class="new-article-button">
+            <form action="/user/add" method="get">
+                <button class="new-article">نشر مقال جديد</button>
+            </form>
+        </div>
+
+        <% if (arr.length===0) { %>
+            <h1 class="no">لا يوجد مقالات</h1>
+            <% } else { %>
+                <% arr.forEach(item=> { %>
+                    <div class="post">
+                        <div class="header">
+                            <img src="./proflie.png" class="profile-img">
+                            <div class="user-info">
+                                <h4 class="username">
+                                    <%= item.elnasher %>
+                                </h4>
+                                <p class="post-time">
+                                    <%= moment(item.createdAt).format('L') %>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="content">
+                            <%= item.addressOfArticle %>
+                        </div>
+                        <br>
+                        <hr class="shadow-hr">
+                        <br>
+                        <div class="button-container">
+                            <a href="#" class="button like-button" onclick="toggleLike('<%= item._id %>')">
+                                <span class="like-count" id="like-count-<%= item._id %>"><%= item.likes.length %></span>
+                                <i class="<%= item.likes.includes(userId) ? 'fas' : 'far' %> fa-thumbs-up" id="like-icon-<%= item._id %>"></i>
+                                <span>أعجبني</span>
+                            </a>
+                            <a href="#" class="button comment-button">
+                                <i class="fas fa-comment-alt"></i>
+                                <span>تعليق</span>
+                            </a>
+                        </div>
+                        <button class="three-dots" onclick="openModal('<%= item._id %>')">
+                            <i class="fa-solid fa-ellipsis-vertical dots"></i>
+                        </button>
+
+                        <div id="modal-<%= item._id %>" class="modal">
+                            <div class="modal-header">
+                                <h1>خيارات المقال</h1>
+                                <button class="btn-close" onclick="closeModal('<%= item._id %>')">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <p id="author-name-<%= item._id %>">المؤلف: <%= item.elnasher %>
+                                </p>
+                                <% if (item.id===userId) { %>
+                                    <div class="modal-footer">
+                                        <form action="/user/view/<%= item._id %>" method="get">
+                                            <button type="submit" class="view-button">عرض المقال</button>
+                                        </form>
+                                        <button class="copy-button" onclick="copyLink('<%= item._id %>')">نسخ
+                                            الرابط</button>
+                                        <form action="/user/delete/<%= item._id %>?_method=DELETE" method="post">
+                                            <button type="submit" class="delete-button">حذف</button>
+                                        </form>
+                                    </div>
+                                    <% } else { %>
+                                        <div class="modal-footer">
+                                            <form action="/user/view/<%= item._id %>" method="get">
+                                                <button type="submit" class="view-button">عرض المقال</button>
+                                            </form>
+                                            <button class="copy-button" onclick="copyLink('<%= item._id %>')">نسخ
+                                                الرابط</button>
+                                        </div>
+                                        <% } %>
+                            </div>
+                        </div>
+
+                        <div id="backdrop-<%= item._id %>" class="modal-backdrop"
+                            onclick="closeModal('<%= item._id %>')"></div>
+                    </div>
+                    <% }) %>
+                        <% } %>
+
+    </div>
+
+    <script>
+        async function toggleLike(articleId) {
+        try {
+            const likeIcon = document.getElementById(`like-icon-${articleId}`);
+            const likeCount = document.getElementById(`like-count-${articleId}`);
+            const isLiked = likeIcon.classList.contains('fas'); // Check if already liked
+
+            // تحديد الرابط بناءً على حالة الإعجاب الحالية
+            const url = isLiked 
+                ? `/articles/${articleId}/unlike` 
+                : `/articles/${articleId}/like`;
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            const result = await response.json();
+
+            // تحديث العدد وتغيير الأيقونة
+            if (response.ok) {
+                likeCount.textContent = result.likesCount;
+                likeIcon.classList.toggle('fas');  // Add/Remove filled thumb
+                likeIcon.classList.toggle('far');  // Toggle between filled and outlined
+            } else {
+                console.error(result.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+        function openModal(id) {
+            // إغلاق أي مودال مفتوح حاليًا
+            let openModals = document.querySelectorAll('.modal');
+            openModals.forEach(modal => {
+                modal.style.display = 'none'; // إخفاء المودال المفتوح
+            });
+            let openBackdrops = document.querySelectorAll('.modal-backdrop');
+            openBackdrops.forEach(backdrop => {
+                backdrop.style.display = 'none'; // إخفاء الـ backdrop المفتوح
+            });
+
+            // إظهار المودال المحدد
+            document.getElementById('modal-' + id).style.display = 'block';
+            document.getElementById('backdrop-' + id).style.display = 'block';
+        }
+
+        function closeModal(id) {
+            document.getElementById('modal-' + id).style.display = 'none';
+            document.getElementById('backdrop-' + id).style.display = 'none';
+        }
+
+        function copyLink(id) {
+            const url = 'http://localhost:3000/user/view/' + id;
+            navigator.clipboard.writeText(url).then(function () {
+                alert('تم نسخ الرابط');
+            }, function (err) {
+                console.error('فشل النسخ', err);
+            });
+        }
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+<!-- 
+        <p>&#128077; Like</p>
+        <p>&#128172; Comment</p>
+-->

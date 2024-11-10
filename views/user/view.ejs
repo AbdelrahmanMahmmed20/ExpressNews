@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عرض المقالة</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e9ebee;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            direction: rtl;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+            margin-top: 40px;
+        }
+
+        h1 {
+            font-size: 26px;
+            color: #3b5998;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .article {
+            margin-bottom: 40px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f7f7f7;
+        }
+
+        .article h2 {
+            font-size: 20px;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .article .date {
+            font-size: 14px;
+            color: #999;
+        }
+
+        .article p {
+            font-size: 18px;
+            color: #444;
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .buttons {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #4267b2;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        button.edit {
+            background-color: #4caf50;
+        }
+
+        button.delete {
+            background-color: #f44336;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>عرض المقالة</h1>
+        <div class="article">
+            <h2>
+                <%= arr.addressOfArticle %>
+                <span class="date">تاريخ النشر: <%= moment(arr.createdAt).format('L') %></span>
+            </h2>
+            <p><%= arr.bodyOfArticle %></p>
+            <div class="buttons">
+                <% if (arr.id === userId) { %>
+                    <form action="/user/update/<%= arr._id %>?_method=PUT" method="get">
+                        <button class="edit">تعديل 🖉</button>
+                    </form>
+                
+                    <form action="/user/delete/<%= arr._id %>?_method=DELETE" method="post" onsubmit="return confirmDelete()">
+                        <button class="delete">حذف 🗑</button>
+                    </form>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function confirmDelete() {
+            return confirm("هل أنت متأكد أنك تريد حذف هذه المقالة؟");
+        }
+    </script>
+</body>
+
+</html>

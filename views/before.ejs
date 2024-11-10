@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إكسبريس نيوز</title>
+    <style>
+        /* إعدادات الخطوط والتنسيق */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #e6f2ff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh; /* ملء الشاشة بالكامل */
+            text-align: center; /* توسيط النصوص */
+        }
+
+        /* شريط التنقل */
+        .navbar {
+            background-color: #005b96;
+            color: #ffffff;
+            padding: 15px;
+            width: 100%; /* عرض كامل */
+            position: fixed; /* تثبيت الشريط في أعلى الصفحة */
+            top: 0; /* الجزء العلوي من الصفحة */
+            left: 0;
+            text-align: center;
+        }
+
+        .navbar a {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        /* قسم المحتوى */
+        .content {
+            padding: 100px 20px; /* إضافة مسافة علوية للتعويض عن شريط التنقل */
+        }
+
+        .content h1 {
+            color: #005b96;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            font-size: 18px;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+
+        /* قسم الأزرار */
+        .button-container {
+            margin-top: 20px;
+        }
+
+        .button {
+            background-color: #005b96;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            margin: 5px; /* إضافة مسافة بين الأزرار */
+        }
+
+        .button:hover {
+            background-color: #003f6b;
+        }
+
+        /* تذييل */
+        .footer {
+            background-color: #005b96;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px;
+            width: 100%;
+            position: fixed;
+            bottom: 0; /* الجزء السفلي من الصفحة */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="#">الرئيسية</a>
+        <a href="#">عن الموقع</a>
+        <a href="#">الخدمات</a>
+        <a href="#">تواصل معنا</a>
+    </div>
+
+    <div class="content">
+        <h1 style="direction: rtl">
+            <% if (user && user.username) { %>
+                مرحباً بك، <%= user.username %>
+            <% } else { %>
+                مرحباً بك في موقعنا
+            <% } %>
+        </h1>
+        
+        <p style="max-width: 400px;">موقع "إكسبريس نيوز" يقدم تغطية شاملة لأحدث الأخبار المحلية والعالمية، مع تحليلات عميقة وآراء متنوعة، مما يجعله وجهة مفضلة للقراء الباحثين عن معلومات موثوقة</p>
+        
+        <div class="button-container">
+            <% if (user && user.username) { %>
+                <a href="/home" class="button">الدخول إلى الصفحة الرئيسية</a>
+            <% } else { %>
+                <a href="/login" class="button">تسجيل الدخول</a>
+                <a href="/signup" class="button">إنشاء حساب</a>
+            <% } %>
+        </div>
+    </div>    
+    
+
+    <div class="footer" style="direction: rtl;">
+        جميع الحقوق محفوظة لدي  TORRENT
+    </div>
+
+</body>
+</html>

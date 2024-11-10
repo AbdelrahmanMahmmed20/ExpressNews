@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول</title>
+    <style>
+        /* إعدادات الخطوط و التوسيط */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f8ff;
+        }
+
+        .login-container {
+            width: 300px;
+            padding: 30px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #005f99;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #005f99;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 10px;
+            background-color: #005f99;
+            border: none;
+            border-radius: 5px;
+            color: #ffffff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-button:hover {
+            background-color: #003f66;
+        }
+
+        .forgot-password {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #005f99;
+        }
+
+        .forgot-password a {
+            color: #005f99;
+            text-decoration: none;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+        #passwordErorr{
+            color: #ff5d79;
+            margin-left: 0.4rem;
+            font-weight: 600;
+        }
+        #emailErorr{
+            color: #ff5d79;
+            margin-left: 0.4rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>تسجيل الدخول</h2>
+        <form id="idForm">
+            <input type="text" name="email" class="input-field" id="email1" placeholder="الايميل" required>
+            <p id="emailErorr"></p>
+            <input type="password" name="password" class="input-field" id="password1" placeholder="كلمة المرور" required>
+            <p id="passwordErorr"></p>
+            <br>
+            <button type="submit" class="login-button">دخول</button>
+        </form>
+        <div class="forgot-password">
+            <a href="/forget_password">نسيت كلمة المرور؟</a>
+        </div>
+    </div>
+
+    <script>
+        idForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            emailErorr.textContent =""
+            passwordErorr.textContent =""
+            const res = await fetch("/login", {
+                method: "POST",
+                body: JSON.stringify({
+                    email: email1.value,
+                    password: password1.value
+                }),
+                headers: { "Content-Type": "application/json" },
+            });
+
+            const data = await res.json();
+
+            if (data.noEmailexist){
+                emailErorr.textContent = data.noEmailexist;
+            }
+            if (data.id){
+                location.assign("/home")
+            }
+            if (data.wrongPassword){
+                passwordErorr.textContent = data.wrongPassword;
+            }
+        });
+    </script>
+</body>
+</html>

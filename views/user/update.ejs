@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Article</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            direction: rtl;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-top: 40px;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 16px;
+            color: #555;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        textarea {
+            resize: vertical; /* يسمح بتغيير حجم النص */
+            height: 200px; /* ارتفاع افتراضي */
+        }
+
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        button {
+            padding: 10px 15px;
+            margin: 0 10px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button.update {
+            background-color: #28a745;
+        }
+
+        button.delete {
+            background-color: #dc3545;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>تحديث المقالة</h1>
+        <form action="#" method="post">
+            <div class="form-group">
+                <label for="title">عنوان المقالة:</label>
+                <input type="text" id="title" name="addressOfArticle" required value="<%= obj.addressOfArticle %>">
+            </div>
+            <div class="form-group">
+                <label for="content">محتوى المقالة:</label>
+                <textarea id="content" name="bodyOfArticle" required >
+                    <%= obj.bodyOfArticle %>
+                </textarea>
+            </div>
+            <div class="buttons">
+                <% if (userId === obj.id) { %>
+                    <form action="/user/update/<%= obj._id %>" method="post">
+                        <button type="submit" class="update">تحديث المقالة</button>
+                    </form>
+    
+                    <form action="/user/delete/<%= obj._id %>?_method=DELETE" method="post">
+                        <button class="delete">حذف</button>
+                    </form>
+                <% } %>
+
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

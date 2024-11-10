@@ -1,0 +1,25 @@
+                        <div class="footer">
+                            <% if (item.id === userId) { %>
+                                <form action="/user/view/<%= item._id %>" method="get">
+                                    <button class="view-button">عرض المقال</button>
+                                </form>
+                                <form action="/user/delete/<%= item._id %>?_method=DELETE" method="post">
+                                    <button class="delete-button">حذف</button>
+                                </form>
+                            <% } else {%>
+                                <form action="/user/view/<%= item._id %>" method="get">
+                                    <button class="view-button">عرض المقال</button>
+                                </form>
+                                <% } %>
+                        </div>
+
+
+<div class="footer">
+
+    img => like
+    text => 0
+
+    
+
+
+</div>            
