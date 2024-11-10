@@ -7,19 +7,22 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>View Articles</title>
     <style>
-        * {
+                * {
             box-sizing: border-box;
         }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #e9eff1;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             direction: rtl;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            min-height: 100vh; /* لضمان توسيط المحتوى عموديا */
+            overflow-x: hidden;
+            flex-direction: column;
         }
 
         .container {
@@ -29,6 +32,8 @@
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
+            overflow-y: auto;
+            height: auto;
         }
 
         .header {
@@ -38,6 +43,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
             direction: rtl;
         }
 
@@ -94,6 +102,30 @@
 
         .new-article:hover {
             background-color: #0056b3;
+        }
+
+        button.like-button {
+            background: none;
+            border: none;
+            padding: 5px 10px;
+            color: #007bff;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        button.like-button i {
+            margin-right: 5px;
+        }
+
+        button.like-button:hover {
+            color: #0056b3;
+        }
+
+        button.like-button:focus {
+            outline: none;
         }
 
         .post {
@@ -172,15 +204,11 @@
 
         .three-dots {
             position: absolute;
-            /* لجعل النقاط ثابتة في مكان معين داخل العنصر */
             left: 10px;
-            /* تحديد المسافة من الحافة اليسرى */
             top: 10px;
-            /* تحديد المسافة من الحافة العليا */
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            /* لضمان محاذاة النقاط بشكل صحيح إلى اليسار */
             cursor: pointer;
             border: none;
             background: transparent;
@@ -195,7 +223,6 @@
             margin: 3px 0;
         }
 
-
         .modal-backdrop {
             position: fixed;
             top: 0;
@@ -205,7 +232,6 @@
             background-color: rgba(0, 0, 0, 0.5);
             display: none;
             z-index: 1000;
-            /* backdrop سيظهر فوق المقالات */
         }
 
         .modal {
@@ -218,7 +244,6 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             display: none;
             z-index: 1050;
-            /* المودال سيظهر فوق الـ backdrop */
             width: 300px;
             padding: 20px;
         }
@@ -254,16 +279,6 @@
         .no {
             color: #c5c5c5;
             text-align: center;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f2f5;
         }
 
         .button-container {
@@ -307,16 +322,14 @@
             border: 0;
             height: 1px;
             background-color: #ddd;
-            box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        .dots {
-            font-size: 25px;
+            box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+            margin: 10px 0;
         }
     </style>
 </head>
 
 <body>
+    <br>
     <div class="container">
         <header class="header">
             <div class="user-info">
@@ -360,11 +373,11 @@
                         <hr class="shadow-hr">
                         <br>
                         <div class="button-container">
-                            <a href="#" class="button like-button" onclick="toggleLike('<%= item._id %>')">
+                            <button class="button like-button" onclick="toggleLike('<%= item._id %>'); return false;">
                                 <span class="like-count" id="like-count-<%= item._id %>"><%= item.likes.length %></span>
                                 <i class="<%= item.likes.includes(userId) ? 'fas' : 'far' %> fa-thumbs-up" id="like-icon-<%= item._id %>"></i>
-                                <span>أعجبني</span>
-                            </a>
+                                <span class="span">أعجبني</span>
+                            </button>
                             <a href="#" class="button comment-button">
                                 <i class="fas fa-comment-alt"></i>
                                 <span>تعليق</span>
@@ -477,15 +490,3 @@
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-<!-- 
-        <p>&#128077; Like</p>
-        <p>&#128172; Comment</p>
--->

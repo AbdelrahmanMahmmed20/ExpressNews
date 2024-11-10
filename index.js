@@ -240,7 +240,7 @@ app.post('/articles/:id/unlike', requireAuth, extractId, async (req, res) => {
     }
 });
 
-mongoose.connect("mongodb://localhost/new")
+mongoose.connect("mongodb://localhost/ExpressNew")
     .then(() => {
         app.listen(port, () => {
             console.log(`http://localhost:${port}/`);
