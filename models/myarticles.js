@@ -2,10 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const myarticles = new Schema({
-    profileImage: {
-        type: String,
-        default: 'https://res.cloudinary.com/dymtrscmc/image/upload/v1731216917/4tUddEegT1GSwrn4mrueeg_m9jlw9.jpg'
-    },
+    profileImage: String,
     elnasher: String,
     id: String,
     addressOfArticle: String,

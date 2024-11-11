@@ -83,6 +83,7 @@
         <form action="/user/add" method="post">
             <input type="hidden" name="elnasher" id="elnasher" value="<%= user.username %>">
             <input type="hidden" name="id" id="id" value="<%= user._id %>">
+            <input type="hidden" name="profileImage" id="profileImage" value="<%= user.profileImage %>">
             <label for="title">عنوان المقالة:</label>
             <input type="text" id="title" name="addressOfArticle" required>
             <label for="content">محتوى المقالة:</label>
