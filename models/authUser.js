@@ -5,8 +5,11 @@ const Schema = mongoose.Schema;
 const authUser = new Schema({
     username : String,
     email : String,
-    password : String
-}, { timestamps: true })
+    password : String,
+    profileImage: {
+        type: String,
+        default: 'https://res.cloudinary.com/dymtrscmc/image/upload/v1731216917/4tUddEegT1GSwrn4mrueeg_m9jlw9.jpg' // ضع هنا الرابط للصورة الافتراضية
+    }}, { timestamps: true })
 
 authUser.pre("save", async function (next) {
     const salt = await bcrypt.genSalt();

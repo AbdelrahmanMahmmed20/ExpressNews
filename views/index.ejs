@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="ar">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dymtrscmc/image/upload/v1731216917/4tUddEegT1GSwrn4mrueeg_m9jlw9.jpg">
-
+    <link rel="icon" type="image/x-icon"
+        href="https://res.cloudinary.com/dymtrscmc/image/upload/v1731216917/4tUddEegT1GSwrn4mrueeg_m9jlw9.jpg">
     <title>ExpressNews</title>
     <style>
-                * {
+        * {
             box-sizing: border-box;
         }
 
@@ -22,7 +21,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh; /* لضمان توسيط المحتوى عموديا */
+            min-height: 100vh;
+            /* لضمان توسيط المحتوى عموديا */
             overflow-x: hidden;
             flex-direction: column;
         }
@@ -105,9 +105,11 @@
         .new-article:hover {
             background-color: #0056b3;
         }
-        .like-button .span{
+
+        .like-button .span {
             color: #606770;
         }
+
         button.like-button {
             background: none;
             border: none;
@@ -329,21 +331,133 @@
             box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
             margin: 10px 0;
         }
+
+        .modal-open-btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* تنسيق الـ modal */
+        .modal-overlay {
+            display: none;
+            /* إخفاء الـ modal بشكل افتراضي */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        /* تنسيق محتوى الـ modal */
+        .modal-box {
+            background-color: #fffcfc;
+            padding: 20px;
+            width: 300px;
+            border-radius: 8px;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-box h2 {
+            color: #000000;
+        }
+
+        /* زر إغلاق الـ modal */
+        .modal-close-btn,
+        .modal-save-btn {
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            color: white;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        /* تنسيق زر "إغلاق" */
+        .modal-close-btn {
+            background-color: #dc3545;
+        }
+
+        /* تنسيق زر "حفظ التغييرات" */
+        .modal-save-btn {
+            background-color: #007bff;
+        }
+
+        /* زر رفع الصورة */
+        .modal-upload-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        /* شكل أيقونة المستخدم الافتراضية */
+        .profile-picture-container {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #007bff;
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* تنسيق الصورة المحملة */
+        .profile-picture-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
     </style>
 </head>
-
 <body>
     <br>
     <div class="container">
         <header class="header">
             <div class="user-info">
-                <span class="user-name">مرحبا، <%= user.username %></span>
+                <img src= <%= user.profileImage %>
+                    class="profile-img" onclick="showModal()">
+                <span class="user-name">
+                    <%= user.username %>
+                </span>
                 <form action="/signout" class="get">
                     <button class="signout-btn">تسجيل الخروج</button>
                 </form>
             </div>
         </header>
-
+        <div id="myModal" class="modal-overlay">
+            <div class="modal-box">
+                <h2>تغيير صورة البروفيل</h2>
+                <br>
+                <hr>
+                <br>
+                <div class="profile-picture-container" id="profileIcon">
+                    <img src="https://res.cloudinary.com/dymtrscmc/image/upload/v1731216917/4tUddEegT1GSwrn4mrueeg_m9jlw9.jpg"
+                        class="profile-img">
+                </div>
+                <input type="file" id="imageUpload" accept="image/*" style="display: none;"
+                    onchange="previewImage(event)">
+                <button class="view-button" onclick="document.getElementById('imageUpload').click()">تغيير
+                    الصورة</button>
+                <button class="delete-button" onclick="hideModal()">اغلاق</button>
+            </div>
+        </div>
         <h1>المقالات</h1>
 
         <!-- زر نشر مقال جديد -->
@@ -359,7 +473,8 @@
                 <% arr.forEach(item=> { %>
                     <div class="post">
                         <div class="header">
-                            <img src="https://res.cloudinary.com/dymtrscmc/image/upload/v1731216917/4tUddEegT1GSwrn4mrueeg_m9jlw9.jpg" class="profile-img">
+                            <img src="https://res.cloudinary.com/dymtrscmc/image/upload/v1731216917/4tUddEegT1GSwrn4mrueeg_m9jlw9.jpg"
+                                class="profile-img">
                             <div class="user-info">
                                 <h4 class="username">
                                     <%= item.elnasher %>
@@ -378,8 +493,11 @@
                         <br>
                         <div class="button-container">
                             <button class="button like-button" onclick="toggleLike('<%= item._id %>'); return false;">
-                                <span class="like-count" id="like-count-<%= item._id %>"><%= item.likes.length %></span>
-                                <i class="<%= item.likes.includes(userId) ? 'fas' : 'far' %> fa-thumbs-up" id="like-icon-<%= item._id %>"></i>
+                                <span class="like-count" id="like-count-<%= item._id %>">
+                                    <%= item.likes.length %>
+                                </span>
+                                <i class="<%= item.likes.includes(userId) ? 'fas' : 'far' %> fa-thumbs-up"
+                                    id="like-icon-<%= item._id %>"></i>
                                 <span class="span">أعجبني</span>
                             </button>
                             <a href="#" class="button comment-button">
@@ -432,35 +550,35 @@
 
     <script>
         async function toggleLike(articleId) {
-        try {
-            const likeIcon = document.getElementById(`like-icon-${articleId}`);
-            const likeCount = document.getElementById(`like-count-${articleId}`);
-            const isLiked = likeIcon.classList.contains('fas'); // Check if already liked
+            try {
+                const likeIcon = document.getElementById(`like-icon-${articleId}`);
+                const likeCount = document.getElementById(`like-count-${articleId}`);
+                const isLiked = likeIcon.classList.contains('fas'); // Check if already liked
 
-            // تحديد الرابط بناءً على حالة الإعجاب الحالية
-            const url = isLiked 
-                ? `/articles/${articleId}/unlike` 
-                : `/articles/${articleId}/like`;
+                // تحديد الرابط بناءً على حالة الإعجاب الحالية
+                const url = isLiked
+                    ? `/articles/${articleId}/unlike`
+                    : `/articles/${articleId}/like`;
 
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
-            });
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
 
-            const result = await response.json();
+                const result = await response.json();
 
-            // تحديث العدد وتغيير الأيقونة
-            if (response.ok) {
-                likeCount.textContent = result.likesCount;
-                likeIcon.classList.toggle('fas');  // Add/Remove filled thumb
-                likeIcon.classList.toggle('far');  // Toggle between filled and outlined
-            } else {
-                console.error(result.message);
+                // تحديث العدد وتغيير الأيقونة
+                if (response.ok) {
+                    likeCount.textContent = result.likesCount;
+                    likeIcon.classList.toggle('fas');  // Add/Remove filled thumb
+                    likeIcon.classList.toggle('far');  // Toggle between filled and outlined
+                } else {
+                    console.error(result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
             }
-        } catch (error) {
-            console.error('Error:', error);
         }
-    }
         function openModal(id) {
             // إغلاق أي مودال مفتوح حاليًا
             let openModals = document.querySelectorAll('.modal');
@@ -490,7 +608,21 @@
                 console.error('فشل النسخ', err);
             });
         }
+
+
+        function showModal() {
+            document.getElementById("myModal").style.display = "flex";
+        }
+
+        function hideModal() {
+            document.getElementById("myModal").style.display = "none";
+        }
+
+        function previewImage(event) {
+            const profileImage = document.getElementById("profileImage");
+            profileImage.src = URL.createObjectURL(event.target.files[0]);
+        }
+
     </script>
 </body>
-
 </html>
