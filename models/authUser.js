@@ -8,7 +8,7 @@ const authUser = new Schema({
     password : String,
     profileImage: {
         type: String,
-        default: 'https://res.cloudinary.com/dymtrscmc/image/upload/v1731216917/4tUddEegT1GSwrn4mrueeg_m9jlw9.jpg' // ضع هنا الرابط للصورة الافتراضية
+        default: 'https://res.cloudinary.com/dymtrscmc/image/upload/v1731216917/4tUddEegT1GSwrn4mrueeg_m9jlw9.jpg'
     }}, { timestamps: true })
 
 authUser.pre("save", async function (next) {

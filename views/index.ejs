@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -426,13 +427,14 @@
         }
     </style>
 </head>
+
 <body>
     <br>
     <div class="container">
         <header class="header">
             <div class="user-info">
-                <img src= <%= user.profileImage %>
-                    class="profile-img" onclick="showModal()">
+                <img src=<%=user.profileImage %>
+                class="profile-img" onclick="showModal()">
                 <span class="user-name">
                     <%= user.username %>
                 </span>
@@ -441,23 +443,30 @@
                 </form>
             </div>
         </header>
-        <div id="myModal" class="modal-overlay">
+        <form 
+        action="/update-profile" 
+        method="post" 
+        enctype="multipart/form-data" 
+        id="myModal" 
+        class="modal-overlay">
+        
             <div class="modal-box">
                 <h2>تغيير صورة البروفيل</h2>
                 <br>
                 <hr>
                 <br>
                 <div class="profile-picture-container" id="profileIcon">
-                    <img src="https://res.cloudinary.com/dymtrscmc/image/upload/v1731216917/4tUddEegT1GSwrn4mrueeg_m9jlw9.jpg"
-                        class="profile-img">
+                    <img src="<%= user.profileImage %>" class="profile-img">
                 </div>
-                <input type="file" id="imageUpload" accept="image/*" style="display: none;"
+                <input name="avator" type="file" id="imageUpload" accept="image/*" style="display: none;"
                     onchange="previewImage(event)">
-                <button class="view-button" onclick="document.getElementById('imageUpload').click()">تغيير
+                <button class="view-button" type="button" onclick="document.getElementById('imageUpload').click()">تغيير
                     الصورة</button>
-                <button class="delete-button" onclick="hideModal()">اغلاق</button>
+                <button class="view-button" type="submit">تحديث الصورة</button>
+                <button class="delete-button" type="button" onclick="hideModal()">اغلاق</button>
             </div>
-        </div>
+        </form>
+
         <h1>المقالات</h1>
 
         <!-- زر نشر مقال جديد -->
@@ -473,7 +482,7 @@
                 <% arr.forEach(item=> { %>
                     <div class="post">
                         <div class="header">
-                            <img src="https://res.cloudinary.com/dymtrscmc/image/upload/v1731216917/4tUddEegT1GSwrn4mrueeg_m9jlw9.jpg"
+                            <img src= <%= user.profileImage %>
                                 class="profile-img">
                             <div class="user-info">
                                 <h4 class="username">
@@ -619,10 +628,14 @@
         }
 
         function previewImage(event) {
-            const profileImage = document.getElementById("profileImage");
-            profileImage.src = URL.createObjectURL(event.target.files[0]);
+            const file = event.target.files[0];
+            if (file) {
+                const imageURL = URL.createObjectURL(file);
+                document.querySelector('#profileIcon img').src = imageURL;
+            }
         }
 
     </script>
 </body>
+
 </html>

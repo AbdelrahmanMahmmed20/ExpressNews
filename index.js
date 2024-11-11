@@ -17,6 +17,9 @@ const { check, validationResult } = require("express-validator");
 app.use(express.json())
 require('dotenv').config()
 
+const multer  = require('multer')
+const upload = multer({storage: multer.diskStorage({})});
+const cloudinary = require('cloudinary').v2
 const requireAuth = (req, res, next) => {
     const token = req.cookies.jwt;
     if (token) {
@@ -94,6 +97,27 @@ app.get("/", (req, res) => {
     post => اكشن معين هتعمله
 */
 
+cloudinary.config({ 
+    cloud_name: 'dymtrscmc', 
+    api_key: '948651646782493', 
+    api_secret: '04nf-t4qcY13nREQGBiDMuSQgXY'
+});
+
+app.post("/update-profile",requireAuth, upload.single('avator'),  function (req, res, next) {
+    // req.file is the `avatar` file
+    // req.body will hold the text fields, if there were any
+    console.log(req.file)
+    cloudinary.uploader.upload( req.file.path , async (error, result)=>{
+        if(result)
+        {
+            var decoded = jwt.verify(req.cookies.jwt , "torrent")
+            const avator = await AuthUser.updateOne({_id : decoded.id} , {profileImage : result.secure_url})
+            res.redirect("/home")
+        }
+    });
+})
+
+
 app.get("/user/add", requireAuth, (req, res) => {
     res.render("user/add");
 });
@@ -159,7 +183,6 @@ app.get("/forget_password", (req, res) => {
 
 // Post request for add articles
 app.post("/user/add", (req, res) => {
-    // req.body  ==> info. of details of articles
     Articles.create(req.body)
         .then(() => { 
             res.redirect('/home');
