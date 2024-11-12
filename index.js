@@ -76,12 +76,12 @@ app.get("/signout", (req, res) => {
     res.redirect("/");
 });
 
-app.get("/home", requireAuth, extractId ,  (req, res) => {
-    // result ==> array of objects
+app.get("/home", requireAuth, extractId, (req, res) => {
     Articles.find()
+        .populate('userId', 'username profileImage')
         .sort({ createdAt: -1 })
         .then((result) => {
-            res.render("index", { arr: result, moment: moment , userId: req.userId});
+            res.render("index", { arr: result, moment: moment, userId: req.userId });
         })
         .catch((err) => {
             console.log(err);
@@ -182,14 +182,21 @@ app.get("/forget_password", (req, res) => {
 });
 
 // Post request for add articles
-app.post("/user/add", (req, res) => {
-    Articles.create(req.body)
-        .then(() => { 
+app.post("/user/add", requireAuth, extractId, (req, res) => {
+    const articleData = {
+        userId: req.userId,
+        id: req.body.id,
+        addressOfArticle: req.body.addressOfArticle,
+        bodyOfArticle: req.body.bodyOfArticle,
+    };
+
+    Articles.create(articleData)
+        .then(() => {
             res.redirect('/home');
         })
         .catch((err) => {
-        console.log(err)
-    })
+            console.log(err)
+        });
 });
 
 

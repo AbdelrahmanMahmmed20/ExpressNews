@@ -482,11 +482,11 @@
                 <% arr.forEach(item=> { %>
                     <div class="post">
                         <div class="header">
-                            <img src= <%= item.profileImage %>
+                            <img src= <%= item.userId.profileImage %>
                                 class="profile-img">
                             <div class="user-info">
                                 <h4 class="username">
-                                    <%= item.elnasher %>
+                                    <%= item.userId.username %>
                                 </h4>
                                 <p class="post-time">
                                     <%= moment(item.createdAt).format('L') %>
@@ -524,7 +524,7 @@
                                 <button class="btn-close" onclick="closeModal('<%= item._id %>')">&times;</button>
                             </div>
                             <div class="modal-body">
-                                <p id="author-name-<%= item._id %>">المؤلف: <%= item.elnasher %>
+                                <p id="author-name-<%= item._id %>">المؤلف: <%= item.userId.username %>
                                 </p>
                                 <% if (item.id===userId) { %>
                                     <div class="modal-footer">

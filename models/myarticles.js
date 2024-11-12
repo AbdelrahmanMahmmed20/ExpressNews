@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
+const User = require("./authUser");
 const Schema = mongoose.Schema;
 
 const myarticles = new Schema({
-    profileImage: String,
-    elnasher: String,
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: User },
     id: String,
     addressOfArticle: String,
     bodyOfArticle: String,
