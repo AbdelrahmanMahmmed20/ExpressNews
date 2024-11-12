@@ -6,7 +6,10 @@ const authUser = new Schema({
     username : String,
     email : String,
     password : String,
-    profileImage : String ,
+    profileImage : {
+        type : String,
+        default : "https://res.cloudinary.com/dymtrscmc/image/upload/v1731345164/re2p8oo1a8fguu09kwcf.jpg"
+    }
 },{ timestamps: true })
 
 authUser.pre("save", async function (next) {
