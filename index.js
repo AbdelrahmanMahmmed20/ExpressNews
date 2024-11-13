@@ -269,6 +269,11 @@ app.post('/articles/:id/unlike', requireAuth, extractId, async (req, res) => {
     }
 });
 
+app.post('/update-username' , requireAuth, extractId, async (req , res) =>{
+    var decoded = jwt.verify(req.cookies.jwt , "torrent")
+    const username = await AuthUser.updateOne({_id: decoded.id} , {$set: { username: req.body.updateUser }})
+    res.redirect('/home')
+})
 
 mongoose.connect("mongodb://localhost/ExpressNew")
     .then(() => {
