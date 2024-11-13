@@ -275,7 +275,7 @@ app.post('/update-username' , requireAuth, extractId, async (req , res) =>{
     res.redirect('/home')
 })
 
-mongoose.connect("mongodb://localhost/ExpressNew")
+mongoose.connect("mongodb+srv://norprogramming:Lv5X6F72yUSwlwkQ@cluster0.qxvw2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
     .then(() => {
         app.listen(port, () => {
             console.log(`http://localhost:${port}/`);
