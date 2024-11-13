@@ -104,9 +104,6 @@ cloudinary.config({
 });
 
 app.post("/update-profile",requireAuth, upload.single('avator'),  function (req, res, next) {
-    // req.file is the `avatar` file
-    // req.body will hold the text fields, if there were any
-    console.log(req.file)
     cloudinary.uploader.upload( req.file.path , async (error, result)=>{
         if(result)
         {
@@ -271,6 +268,7 @@ app.post('/articles/:id/unlike', requireAuth, extractId, async (req, res) => {
         res.status(500).json({ error: 'Error removing like' });
     }
 });
+
 
 mongoose.connect("mongodb://localhost/ExpressNew")
     .then(() => {

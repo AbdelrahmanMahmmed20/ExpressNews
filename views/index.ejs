@@ -425,6 +425,22 @@
             height: 100%;
             object-fit: cover;
         }
+        .text {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.text:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.6);
+    outline: none;
+}
     </style>
 </head>
 
@@ -435,7 +451,7 @@
             <div class="user-info">
                 <img src=<%=user.profileImage %>
                 class="profile-img" onclick="showModal()">
-                <span class="user-name">
+                <span class="user-name" onclick="shoModal()">
                     <%= user.username %>
                 </span>
                 <form action="/signout" class="get">
@@ -443,13 +459,8 @@
                 </form>
             </div>
         </header>
-        <form 
-        action="/update-profile" 
-        method="post" 
-        enctype="multipart/form-data" 
-        id="myModal" 
-        class="modal-overlay">
-        
+        <form action="/update-profile" method="post" enctype="multipart/form-data" id="myModal" class="modal-overlay">
+
             <div class="modal-box">
                 <h2>تغيير صورة البروفيل</h2>
                 <br>
@@ -464,6 +475,23 @@
                     الصورة</button>
                 <button class="view-button" type="submit">تحديث الصورة</button>
                 <button class="delete-button" type="button" onclick="hideModal()">اغلاق</button>
+            </div>
+        </form>
+
+        <form 
+        action="/update-username" 
+        method="post" 
+        id="myModa" 
+        class="modal-overlay">
+
+            <div class="modal-box">
+                <h2>تغيير اسم الشخص </h2>
+                <br>
+                <hr>
+                <br>
+                <input type="text" class="text" value="<%= user.username %>">
+                <button class="view-button" type="submit">تعديل</button>
+                <button class="delete-button" type="button" onclick="hidModal()">اغلاق</button>
             </div>
         </form>
 
@@ -482,8 +510,8 @@
                 <% arr.forEach(item=> { %>
                     <div class="post">
                         <div class="header">
-                            <img src= <%= item.userId.profileImage %>
-                                class="profile-img">
+                            <img src=<%=item.userId.profileImage %>
+                            class="profile-img">
                             <div class="user-info">
                                 <h4 class="username">
                                     <%= item.userId.username %>
@@ -625,6 +653,14 @@
 
         function hideModal() {
             document.getElementById("myModal").style.display = "none";
+        }
+
+        function shoModal() {
+            document.getElementById("myModa").style.display = "flex";
+        }
+
+        function hidModal() {
+            document.getElementById("myModa").style.display = "none";
         }
 
         function previewImage(event) {
