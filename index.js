@@ -79,8 +79,8 @@ app.get("/signout", (req, res) => {
 app.get("/home", requireAuth, extractId, (req, res) => {
     Articles.find()
         .populate('userId', 'username profileImage')
-        .sort({ createdAt: -1 })
         .then((result) => {
+            result.sort(() => Math.random() - 0.5);
             res.render("index", { arr: result, moment: moment, userId: req.userId });
         })
         .catch((err) => {
