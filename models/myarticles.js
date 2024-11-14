@@ -14,5 +14,4 @@ const myarticles = new Schema({
 
 const Article = mongoose.model("article", myarticles);
 
-// تصدير الموديل
 module.exports = Article;
