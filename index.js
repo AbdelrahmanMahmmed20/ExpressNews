@@ -196,6 +196,9 @@ app.post("/user/add", requireAuth, extractId, (req, res) => {
         });
 });
 
+app.use((req, res) => {
+    res.render('user/404')
+});
 
 app.post("/user/update/:id", (req, res) => {
     console.log("Updating document with ID:", req.params.id);
